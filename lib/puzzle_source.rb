@@ -4,8 +4,9 @@ require 'benchmark'
 class PuzzleSource
   def self.create_puzzle(year, day)
     padded_day = Day.pad(day)
+    input = PuzzleInput.load(year, day)
     begin
-      Module.const_get("Year#{year}").const_get("Day#{padded_day}").new
+      Module.const_get("Year#{year}").const_get("Day#{padded_day}").new(input)
     rescue NameError
       puts 'There is no solution for this puzzle'
     end
@@ -39,13 +40,22 @@ class PuzzleSource
     day = Day.pad(day)
 
     <<~TPL
+      require 'colorize'
+      require 'pry-byebug'
+
       module Year#{year}
         class Day#{day}
-          def part1(input)
-            "expected_result"
+          attr_accessor :lines
+
+          def initialize(input)
+            @lines = input.split("/\n")
           end
 
-          def part2(input)
+          def part1
+            nil
+          end
+
+          def part2
             nil
           end
         end

@@ -5,8 +5,8 @@ require 'thor'
 require 'benchmark'
 lib_files = File.join(File.dirname(__FILE__), 'lib', '*.rb')
 src_files = File.join(File.dirname(__FILE__), 'src', '**', '*.rb')
-Dir[lib_files].each { |file| require file }
-Dir[src_files].each { |file| require file }
+Dir[lib_files].sort.each { |file| require file }
+Dir[src_files].sort.each { |file| require file }
 
 # The CLI application
 class Aoc < Thor
@@ -29,26 +29,43 @@ downloads the input, creates a sample source and spec file'
   method_option :run_day, aliases: '-r'
   def run_day(year, day)
     puzzle = PuzzleSource.create_puzzle(year, day)
-    input = PuzzleInput.load(year, day)
-    PuzzleSource.run_part('part 1') { puzzle.part1(input) }
-    puts
-    PuzzleSource.run_part('part 2') { puzzle.part2(input) }
+    PuzzleSource.run_part('part 1') { puzzle.part1 }
+    PuzzleSource.run_part('part 2') { puzzle.part2 }
+  end
+
+  desc 'test YEAR DAY', 'tests a given day/year'
+  method_option :test, aliases: '-r'
+  def test(year, day)
+    padded_day = Day.pad(day)
+    system("rspec spec/year#{year}/day#{padded_day}_spec.rb")
   end
 
   desc 'part1 YEAR DAY', 'executes the part1 for a given day/year'
   method_option :part1
   def part1(year, day)
     puzzle = PuzzleSource.create_puzzle(year, day)
-    input = PuzzleInput.load(year, day)
-    PuzzleSource.run_part('part 1') { puzzle.part1(input) }
+    PuzzleSource.run_part('part 1') { puzzle.part1 }
+  end
+
+  desc 'test1 YEAR DAY', 'tests the part1 for a given day/year'
+  method_option :test1
+  def test1(year, day)
+    padded_day = Day.pad(day)
+    system("rspec spec/year#{year}/day#{padded_day}_spec.rb" ' --tag part1')
   end
 
   desc 'part2 YEAR DAY', 'executes the part2 for a given day/year'
   method_option :part2
   def part2(year, day)
     puzzle = PuzzleSource.create_puzzle(year, day)
-    input = PuzzleInput.load(year, day)
-    PuzzleSource.run_part('part 2') { puzzle.part2(input) }
+    PuzzleSource.run_part('part 2') { puzzle.part2 }
+  end
+
+  desc 'test2 YEAR DAY', 'tests the part2 for a given day/year'
+  method_option :test2
+  def test2(year, day)
+    padded_day = Day.pad(day)
+    system("rspec spec/year#{year}/day#{padded_day}_spec.rb --tag part2")
   end
 end
 

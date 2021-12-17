@@ -1,4 +1,8 @@
-# AoC-rb
+# AOC CLI
+
+## This repo is a fork of [aoc-cli](https://github.com/Keirua/aoc-cli), by [Keirua](https://github.com/Keirua).
+
+-------
 
 `AoC-rb` is a ruby Advent of Code command line utility. [Advent of Code](https://adventofcode.com/) is a yearly programming challenge that takes place in december.
 It allows you to focus on solving the puzzles, not on the manual details:
@@ -16,34 +20,38 @@ Once you have installed the project, there are 2 main commands. The other one ar
 `aoc bootstrap` is a way to get started playing a given day.
 It downloads the input file, creates a sample source file for that day, as well as a spec file. 
 
-Here is an example that gets started playing the first day of year 2018 : `./aoc bootstrap 2018 1`
+Here is an example that gets started playing the first day of year 2021 : `./aoc bootstrap 2021 1`
 It will create the input file in the ``
 ```
 aoc-cli
 ├── input
-│   └── 2018
+│   └── 2021
 │       └── day-01
 ├── spec
 │   ├── spec_helper.rb
-│   └── year2018
+│   └── year2021
 │       └── day01_spec.rb
 └── src
-    └── year2018
+    └── year2021
         └── day01.rb
 ```
 
-The `src/year/2018/day01.rb` is simple but it contains all you need: 2 methods, `part1` and `part2`, that take as parameter the content of the input file, and return the expected value.
+The `src/year/2021/day01.rb` is simple but it contains all you need: an initializer (that takes as parameter the content of the input file), and 2 methods: `part1` and `part2`, that return the expected value.
 
 ```ruby
-module Year2018
+module Year2021
   class Day01
-    # input is the content of the input file.
-    # part1 should return the answer to the first part of that day 
-    def part1(input)
-      "expected_result"
+    attr_accessor :lines
+    
+    def initialize(input)
+      @lines = input.split("\n")
     end
 
-    def part2(input)
+    def part1
+      nil
+    end
+
+    def part2
       nil
     end
   end
@@ -55,7 +63,7 @@ end
 If you run your solution with `aoc-run`, aoc-cli takes care of loading the input file and measuring the execution time for you.
 
 ```
-./aoc run 2018 1      
+./aoc run 2021 1      
 Result for part 1:
 expected_result
 (obtained in 2.1908000235271174e-05 seconds)
@@ -68,18 +76,20 @@ no result for part 2
 There are 3 other commands you may want to use:
 
  - `aoc download YEAR DAY`: it downloads a puzzle input file in the `input` directory
- - `aoc part2 YEAR DAY`: same as `aoc run`, but only runs the part 1 for a given day
+ - `aoc part1 YEAR DAY`: same as `aoc run`, but only runs the part 1 for a given day
  - `aoc part2 YEAR DAY`: same as `aoc run`, but only runs the part 2 for a given day
+
+To run your local test, update the spec file for the correct day. Than you can run the following commands:
+
+ - `aoc test YEAR DAY`: runs the tests for both part 1 and 2
+ - `aoc test1 YEAR DAY`: only runs the tests for part 1 for a given day
+ - `aoc test2 YEAR DAY`: only runs the tests for part 2 for a given day
 
 ## Installation
 
  - clone this project
  - install the dependencies by running `bundle install`
- - login to [adventofcode](https://adventofcode.com/), and copy your session cookie. With firefox:
-   - hit F12 in order to open the developper console
-   - go to «Cookie»
-   - Copy the «value» field of the «session» Cookie. On the screenshot, it's the part that starts with «536…»
-  ![](doc/aoc-cookie-ff.png)
+ - login to [adventofcode](https://adventofcode.com/), and copy your session cookie. 
  - copy the `.env.example` file into `.env`.
  - paste the cookie in the AOC_COOKIE variable. The `.env` file should look like this:
 ```

@@ -16,14 +16,14 @@ class PuzzleSpec
       require 'spec_helper'
 
       RSpec.describe Year#{year}::Day#{day} do
-        it "solves part1" do
-          d = Year#{year}::Day#{day}.new
-          expect(d.part1('some_input')).to eq('expected_result')
+        it "solves part1", part1: true do
+          d = Year#{year}::Day#{day}.new('some_input')
+          expect(d.part1).to eq('expected_result')
         end
 
-        it "solves part2" do
-          d = Year#{year}::Day#{day}.new
-          expect(d.part2('some_input')).to eq(nil)
+        it "solves part2", part2: true do
+          d = Year#{year}::Day#{day}.new('some_input')
+          expect(d.part2).to eq(nil)
         end
       end
     TPL
